@@ -1,0 +1,186 @@
+# Transformação e visualização de dados
+
+```{r}
+library(tidyverse)
+```
+
+Até agora, estudamos as principais ferramentas de transformação de dados do `tidyverse`. Hoje vamos aumentar um pouco mais nosso toolkit e vamos utilizá-lo na prática nos exempos das câmaras e especialização.
+
+Ler as bases
+
+```{r echo=TRUE}
+path <- "data-raw/camaras"
+d_cjsg <- readr::read_rds(stringr::str_glue("{path}/d_cjsg.rds"))
+d_cposg <- readr::read_rds(stringr::str_glue("{path}/d_cposg.rds"))
+```
+
+**List columns**: `nest` e `unnest`
+
+`nest` e `unnest` são operações inversas e servem para tratar dados complecos, como o que temos em `d_cposg`
+
+```{r, echo=TRUE, echo=TRUE}
+d_partes <- d_cposg %>% 
+  dplyr::select(id_lawsuit, parts) %>% 
+  tidyr::unnest(parts)
+
+d_decisoes <- d_cposg %>% 
+  dplyr::select(id_lawsuit, decisions) %>% 
+  tidyr::unnest(decisions)
+```
+
+
+--------------------------------------------------------------------------------
+
+
+## Finalizando análise das câmaras
+
+Agora vamos fazer gráficos!
+
+```{r, out.width="70%", fig.align="center"}
+knitr::include_graphics("imgs/dataviz.jpg")
+```
+
+
+### Como se distribuem os assuntos em cada câmara?
+
+Gráfico fraqueza:
+
+```{r, echo=TRUE, warning=FALSE, fig.width=9, fig.height=5}
+d_cjsg %>%
+  tidyr::separate(class_subject, c('classe', 'assunto'), 
+                  sep = ' / ',  extra = 'merge', fill = 'right') %>% 
+  ggplot(aes(x = court, fill = assunto)) +
+  geom_bar(colour = 'black', position = "fill", show.legend = FALSE)
+```
+
+Gráfico nutella:
+
+```{r, echo=TRUE, warning=FALSE, fig.width=9, fig.height=5}
+d_cjsg %>%
+  ## transformacao -------------------------------------------------------------
+  # tirar NA (não tem problema pois são aqueles casos que não existem)
+  dplyr::filter(!is.na(court)) %>% 
+  tidyr::separate(class_subject, c('classe', 'assunto'), sep = ' / ', 
+                  extra = 'merge', fill = 'right') %>%
+  # categorizar os assuntos e mudar a ordem
+  dplyr::mutate(assunto = assunto %>% 
+                  stringr::str_wrap(19) %>% 
+                  forcats::fct_infreq() %>% # ordena o factor decrescente
+                  forcats::fct_rev() %>% 
+                  forcats::fct_lump(n = 11, other_level = "Outros")) %>% 
+  # pega somente os números das câmaras e coloca zeros à esquerda
+  dplyr::mutate(num = parse_number(court),
+                num = str_pad(num, 2, pad = "0")) %>% 
+  # grafico --------------------------------------------------------------------
+  ggplot(aes(x = num, fill = assunto)) +
+  geom_bar(colour = 'black', position = "fill") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  # coisas cosméticas
+  theme_minimal(14) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = 'Órgão julgador', 
+       y = 'Proporção de \nprocessos por assunto',
+       fill = "") +
+  theme(legend.position = "bottom")
+```
+
+
+### Qual a proporção de decisões por câmara?
+
+Primeiro, vamos montar a função que classifica as decisões.
+
+```{r echo=TRUE}
+# essa é a classificação final
+negaram <- stringr::regex('negara?m|nega-se|negam-se', ignore_case = TRUE)
+parcial <- stringr::regex('parcial', ignore_case = TRUE)
+deram <- stringr::regex('deram|mantiv|dá-se|nul|conhec', ignore_case = TRUE)
+extinto <- stringr::regex('extin', ignore_case = TRUE)
+
+tipos_decisao <- function(decisoes) {
+  dplyr::case_when(
+    stringr::str_detect(decisoes, negaram) ~ 'negado',
+    stringr::str_detect(decisoes, parcial) ~ 'parcial',
+    stringr::str_detect(decisoes, deram) ~ 'provido',
+    stringr::str_detect(decisoes, extinto) ~ 'extinto',
+    TRUE ~ "outros")
+}
+```
+
+Agora, vamos pegar apenas os casos em que as pessoas entraram com recursos de apelação contra o Ministério Público.
+
+```{r echo=TRUE}
+partes_apelacoes <- d_cposg %>% 
+  dplyr::select(id, id_lawsuit, parts) %>% 
+  tidyr::unnest(parts) %>% 
+  dplyr::filter(part == 'Apelado', stringr::str_detect(name, '[Mm]inist')) %>% 
+  # Exercício: por que usamos distinct aqui?
+  dplyr::distinct(id_lawsuit)
+```
+
+Agora, montamos a base de decisões
+
+```{r echo=TRUE}
+d_decisoes <- d_cposg %>% 
+  dplyr::select(id, id_lawsuit, decisions) %>% 
+  tidyr::unnest(decisions) %>% 
+  # Exercício: o que faz semi_join()?
+  dplyr::semi_join(partes_apelacoes, "id_lawsuit") %>% 
+  dplyr::arrange(desc(date)) %>%  
+  dplyr::group_by(id_lawsuit) %>%
+  # Exercício: o que faz slice()?
+  dplyr::slice(1) %>% 
+  dplyr::ungroup()
+
+decisoes <- d_decisoes %>% 
+  dplyr::mutate(tipo_decisao = tipos_decisao(decision)) %>% 
+  dplyr::select(id_lawsuit, tipo_decisao)
+```
+
+Gráfico fraqueza:
+
+```{r, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4}
+d_cjsg %>% 
+  dplyr::distinct(id_lawsuit, .keep_all = TRUE) %>% 
+  dplyr::inner_join(decisoes, 'id_lawsuit') %>% 
+  ggplot(aes(x = court, fill = tipo_decisao)) +
+  geom_bar(position = "fill")
+```
+
+Gráfico nutella:
+
+```{r, echo=TRUE, eval=TRUE, fig.width=9, fig.height=6}
+prop_negados <- function(x) {
+ sum(x == "negado") / length(x)
+}
+
+d_cjsg %>%
+  dplyr::distinct(id_lawsuit, .keep_all = TRUE) %>% 
+  dplyr::inner_join(decisoes, 'id_lawsuit') %>% 
+  dplyr::mutate(num = court %>% 
+                  readr::parse_number() %>% 
+                  stringr::str_pad(width = 2, pad = "0") %>% 
+                  forcats::fct_reorder(tipo_decisao, prop_negados) %>% 
+                  forcats::fct_rev()) %>% 
+  dplyr::mutate(tipo_decisao = fct_infreq(tipo_decisao) %>% fct_rev()) %>% 
+  # grafico --------------------------------------------------------------------
+  ggplot(aes(x = num, fill = tipo_decisao)) +
+  geom_bar(colour = 'black', position = 'fill', size = .3) +
+  geom_hline(yintercept = 1:4 / 4, linetype = 2, alpha = .4) +
+  scale_y_continuous(labels = scales::percent) +
+  coord_flip() +
+  # perfumaria -----------------------------------------------------------------
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme_minimal(16) +
+  theme(legend.position = "bottom") +
+  labs(x = "Câmara", 
+       y = 'Proporção de processos por tipo de decisão', 
+       fill = "Decisão")
+```
+
+## Wrap-up
+
+- Terminamos o projeto das câmaras
+- Aprendemos `tidyr`, `stringr` e `forcats` no meio do caminho
+- revisitamos `ggplot2` e brincamos de visualização.
+
+FIM :)

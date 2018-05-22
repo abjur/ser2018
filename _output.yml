@@ -1,0 +1,13 @@
+bookdown::gitbook:
+  dev: svglite
+  split_by: section
+  config:
+    toc:
+      collapse: none
+      before: |
+        <li><a href='http://abj.org.br'><img src='https://raw.githubusercontent.com/abjur/tjspBook/master/abj_logo_cut.png' style="max-width:100%;"/></a></li>
+      after: |
+        <li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+    sharing:
+      github: yes
+      facebook: no

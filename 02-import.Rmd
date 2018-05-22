@@ -1,0 +1,455 @@
+# Importação de dados
+
+**Setup**
+
+1. Logar no servidor http://r.abj.org.br
+2. Novo projeto > Version Control > GIT
+3. Colocar a URL https://github.com/abjur/ser2018
+4. Iniciar projeto
+5. Abrir o arquivo 02-import.Rmd
+6. Rodar `library(tidyverse)`
+
+
+```{r}
+library(tidyverse)
+```
+
+Agora nós estamos aqui:
+
+```{r, out.width="80%", fig.align="center"}
+knitr::include_graphics("imgs/wrangle.png")
+```
+
+Nessa parte, vamos aprender a **baixar dados da web**. No contexto da jurimetria, isso é muito importante por dois motivos: 
+
+i) você nunca pode esperar que alguém ofereça esses dados organizados para você e 
+
+ii) isso é muito divertido e é um aprendizado para a vida.
+
+Você, depois dessa aula
+
+```{r, out.width="90%", fig.align="center"}
+knitr::include_graphics("imgs/stark.jpg")
+```
+
+Se você não praticar depois
+
+```{r, out.width="90%", fig.align="center"}
+knitr::include_graphics("imgs/meme_purrr.jpg")
+```
+
+
+--------------------------------------------------------------------------------
+
+## Usando o Inspect
+
+Se você quer aprender a baixar dados da web, você precisa aprender a usar o Inspect do seu navegador. Para isso, vamos abrir a página do [e-SAJ](https://esaj.tjsp.jus.br/cjsg/consultaCompleta.do).
+
+```{r, out.width="100%", fig.align="center"}
+knitr::include_graphics("imgs/esaj01.png")
+```
+
+- Agora clique com o botão direito e depois em "inspecionar" (vamos assumir que você está usando o Google Chrome). 
+- Na tela que vai abrir, entre na aba "Network". 
+- O navegador vai pedir que você atualize a página, apertando F5. Faça isso.
+- Agora você verá uma lista de documentos que seu navegador baixou para carregar a página. 
+- O primeiro item dessa lista, `consultaCompleta.do`, contém informações da sua consulta processual. Clique nesse item.
+
+```{r, out.width="100%", fig.align="center"}
+knitr::include_graphics("imgs/esaj02.png")
+```
+
+O conteúdo dessa página é a **requisição web** utilizada para acessar o e-SAJ. Basicamente, tudo o que faremos na parte de web scraping é tentar imitar o que esse site faz. 
+
+Tenha em mente que, para construir um scraper, você usará duas ferramentas principais: seu navegador e o RStudio.
+
+
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+
+
+## Pacotes `httr`, `xml2` e `rvest`
+
+Esses são os três pacotes mais modernos do R para fazer web scraping. 
+
+- O pacote `xml2` tem a finalidade de estruturar arquivos HTML ou XML de forma eficiente, tornando possível a obtenção de *tags* e seus atributos dentro de um arquivo. 
+
+- O pacote `httr` é responsável por realizar requisições web para obtenção das páginas de interesse, buscando reduzir ao máximo a complexidade da programação. 
+
+- O pacote `rvest` é escrito **sobre** os dois anteriores e por isso eleva ainda mais o nível de especialização para raspagem de dados.
+
+- Esses pacotes **não** são suficientes para acessar todo tipo de conteúdo da web. Não discutiremos `selenium` nesse curso, mas caso queira se aprofundar, acesse [aqui](http://www.seleniumhq.org/) e o pacote `RSelenium`.
+
+### `GET` e `POST`
+
+- Uma requisição GET envia uma `url` ao servidor, possivelmente com alguns parâmetros nessa `url` (que ficam no final da `url` depois do `?`). O servidor, por sua vez, recebe essa `url`, processa os parâmetros e retorna uma página HTML para o navegador.
+
+- A requisição `POST` envia uma `url` não modificada para o servidor, mas envia também uma lista de dados preenchidos pelo usuário, que podem ser números, textos ou até imagens. Na maioria dos casos, ao submeter um formulário de um site, fazemos uma requisição `POST`.
+
+- O `httr` possui os métodos `GET` e `POST` implementados e são muito similares. A lista de parâmetros enviados pelo usuário pode ser armazenado numa `list` nomeada, e adicionado ao `GET` pelo parâmetro `query` ou no `POST` pelo parâmetro `body`.
+
+Exemplo de `GET`
+
+```{r echo=TRUE}
+httr::GET("http://google.com/search", 
+          query = list(q = "jurimetria"))
+```
+
+Exemplo de `POST`
+
+```{r echo=TRUE}
+httr::POST("http://httpbin.org/post", 
+           body = list(x = "Mãe to na request"), 
+           encode = "json")
+```
+
+### Exercícios
+
+Use o Inspect:
+
+1. Qual o método usado na pesquisa de jurisprudência do TJSP?
+2. Qual o método usado na busca avançada de diários de justiça do TJSP?
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+
+
+
+
+## Listando processos
+
+A forma de listar processos muda se seu estudo é prospectivo ou retrospectivo. Se o estudo for prospectivo, precisamos baixar dados dos **Diários de Justiça Eletrônicos** (DJE), que são arquivos PDF enormes. Se o estudo for retrospectivo, precisamos baixar dados da **Consulta de Julgados de Segundo Grau** (CJSG), que é um formulário na internet, mais simples.
+
+- Se o seu estudo é retrospectivo, use `esaj::download_cjsg()`. CJSG significa Consulta de Julgados de Segundo Grau.
+
+- Se o seu estudo é prospectivo, use`dje::download_dje()`. DJE significa Diário de Justiça Eletrônico
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+
+
+
+## Usando o `esaj` para listar processos
+
+A CJSG possui vários parâmetros para consulta de decisões. As mais usadas são
+
+- Palavras-chave
+- Classe, assunto e câmaras
+- Intervalos de datas
+
+### Pesquisa por palavras-chave
+
+A pesquisa por palavras-chave não tem segredo. Basta você seguir as especificações [deste link](https://esaj.tjsp.jus.br/WebHelp/#id_operadores_logicos.htm).
+
+É importante ressaltar alguns pontos
+
+- O e-SAJ **não** disponibiliza seu tesauro (dicionário estruturado) publicamente. Ou seja, você terá de confiar na pesquisa por sinônimos.
+
+- Você não pode fazer uma busca completamente vazia. Ou você coloca a palavra-chave, ou você especifica outro parâmetro.
+
+- Você pode pesquisar o termo `a OU (NAO a)`, se quiser...
+
+### Pesquisa por datas
+
+Você pode usar duas datas para indexar os processos de sua pesquisa. A *data de registro* é a data em que o serventuário inclui a decisão no sistema. A *data de julgamento* é a data em que o conjunto de desembargadores proferiram a decisão.
+
+Normalmente, a indexação aconteceria pela data de julgamento, já que queremos vincular os processos à sua data final, não em relação à uma data do sistema. No entanto, as pesquisas indexadas pela data de julgamento não são completamente reprodutíveis, já que à medida que o tempo passa, mais decisões são registradas, mudando a base de julgados.
+
+**Regra de bolso**:
+
+- Use data de registro se quiser ter certeza de que você pegou todos os casos em um determinado intervalo de tempo. 
+- Use data de julgamento se você estiver pesquisando casos mais antigos (por exemplo, de 2016 para trás), já que a quantidade de decisões não registradas nesse escopo é negligenciável.
+
+### Tabelas de classes, assuntos e câmaras
+
+Classes e assuntos definem, respectivamente, os ritos processuais e os tipos processuais. As câmaras são as casinhas dos desembargadores, que podem ser ordinárias (fixas) ou extraordinárias (eventuais, criadas por diferentes motivos).
+
+As classes e assuntos são definidas em formato de árvore. Cada nível dessa árvore tem uma lista de classes/assuntos e seus respectivos códigos. As tabelas de classes/assuntos podem ser obtidas pela função `esaj::cjsg_table()`.
+
+```{r eval=FALSE, echo=TRUE}
+# Não rode esses códigos. Eles baixam os dados diretos da web
+classes <- esaj::cjsg_table("classes")
+assuntos <- esaj::cjsg_table("subjects")
+```
+
+Já baixamos essas tabelas e colocamos em arquivos `.rds` (você sabe o que é um arquivo `.rds`?) 
+
+```{r, echo=TRUE}
+classes <- readr::read_rds("data/cjsg_classes.rds")
+assuntos <- readr::read_rds("data/cjsg_assuntos.rds")
+
+dplyr::glimpse(assuntos)
+```
+
+Na prática, você vai procurar os assuntos que quer nessa tabela, obter os respectivos códigos e guardar em um vetor. 
+
+**Cuidado**: Lembre-se da cifra oculta! Além disso, muitos casos têm assunto vazio.
+
+A tabela de câmaras segue a mesma regra. A única diferença é que não existem níveis, logo você só precisará procurar os nomes em uma coluna
+
+```{r eval=FALSE, echo=TRUE}
+camaras <- esaj::cjsg_table("courts")
+```
+
+```{r, echo=TRUE}
+camaras <- readr::read_rds("data/cjsg_camaras.rds")
+dplyr::glimpse(camaras)
+```
+
+### A função `download_cjsg`
+
+Com o escopo em mãos, podemos finalmente começar a baixar dados. Esses são os argumentos da função `esaj::download_cjsg()`. Veja a documentação `?esaj::download_cjsg`
+
+```{r, echo=TRUE}
+args(esaj::download_cjsg)
+```
+
+Esse código baixa duas páginas da pesquisa de jurisprudência usando a palavra-chave `homicídio`, salvando os arquivos HTML na pasta `data-raw/cjsg`
+
+```{r eval=FALSE, echo=TRUE}
+esaj::download_cjsg("homicídio", "data-raw/cjsg", max_page = 2)
+```
+
+**Onde guardar os dados?** Ao construir um scraper, é importante guardar os dados brutos na máquina ou num servidor, para reprodutibilidade e manutenção do scraper. Se estiver construindo um pacote do R, o melhor lugar para guardar esses dados é na pasta `data-raw`, como sugerido no livro [r-pkgs](http://r-pkgs.had.co.nz). Se os dados forem muito volumosos, pode ser necessário colocar esses documentos numa pasta externa ao pacote. 
+
+### Exercícios
+
+1. Faça o download das páginas 2 à 5 de uma pesquisa com palavra-chave igual ao seu primeiro nome.
+2. Descubra quantos resultados tem a sua pesquisa usando a função `esaj::peek_cjsg()`.
+
+### Arrumando os dados
+
+Para transformar os arquivos HTML em bases de dados prontas para análise, você precisa rodar `esaj::parse_cjsg()`.
+
+```{r, echo=TRUE}
+files <- fs::dir_ls("data-raw/cjsg", regexp = "page")
+d_cjsg <- esaj::parse_cjsg(files)
+
+dplyr::glimpse(d_cjsg)
+```
+
+### Exercícios
+
+Na pesquisa que você fez: 
+
+1. Quem é o relator mais frequente?
+2. Qual a comarca de origem mais frequente?
+3. [Difícil] Qual é o assunto mais comum?
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+--------------------------------------------------------------------------------
+
+## Baixando processos individuais
+
+A tarefa de baixar documentos a partir de processos será realizada pelas funções
+
+- `esaj::download_cposg()`, 
+- `esaj::download_decision()`.
+
+
+
+### Download CPOSG
+
+As funções de download de processos recebem um vetor de números e baixam um HTML para cada deles. Às vezes um número de processo corresponde a mais do que um documento. Nesse caso, ambos os documentos são baixados, adicionando-se identificação de data.
+
+```{r eval=FALSE, echo=TRUE}
+processos <- unique(d_cjsg$id_lawsuit)
+esaj::download_cposg(processos, "data-raw/cposg")
+```
+
+
+
+
+### Baixando decisões
+
+Você também pode baixar as decisões (sentenças ou acórdãos) do processo, em PDF. O código a ser rodado nesse caso é
+
+```{r eval=FALSE, echo=TRUE}
+acordaos <- d_cjsg$id_decision
+esaj::download_decision(acordaos, path = "data-raw/decisions")
+```
+
+Por trás da função `esaj::download_decision()` estamos quebrando um CAPTCHA. Essa função ainda está instável, então pode ser necessário rodá-la várias vezes para obter os documentos finais.
+
+
+
+
+--------------------------------------------------------------------------------
+
+## Processando documentos
+
+Finalmente, processar documentos significa carregar dados acessíveis em disco e transformar os dados brutos uma base *tidy*. 
+
+Usualmente separamos a estruturação em duas etapas: 
+
+i) transformar arquivos não-estruturados em um arquivos semi-estruturados (e.g. um arquivo HTML em uma tabela mais um conjunto de textos livres) e 
+
+ii) transformar arquivos semi-estruturados em uma base analítica (estruturada). 
+
+A tarefa de processar as páginas HTML será realizada pelas funções `esaj::parse_cjsg()` e `esaj::run_parser()`.
+
+### Parse CPOSG
+
+O parser da consulta de processos foi escrito de um jeito especial. Uma página de resultados tem vários blocos de informações, entre eles i) dados básicos, ii) partes, iii) movimentações e iv) decisões. Em algumas pesquisas, temos interesse em apenas uma parte desses blocos. O parser foi construído para modular essa captura de informações.
+
+```{r eval=FALSE, echo=TRUE}
+# lista de arquivos
+files_cposg <- fs::dir_ls("data-raw/cposg")
+
+# objeto de parse
+parser <- esaj::make_parser() %>% 
+  esaj::parse_data() %>% 
+  esaj::parse_parts() %>% 
+  esaj::parse_movs() %>% 
+  esaj::parse_decisions()
+
+# rodar parse
+d_cposg <- esaj::run_parser(file = files_cposg, 
+                            parser = parser, 
+                            path = "data-raw/cposg_rds")
+```
+
+Outra diferença importante é que, nesse caso, salvamos individualmente os resultados do parse em arquivos `.rds`. Isso é feito para evitar retrabalho, já que esse processo é computacionalmente intensivo e algo de errado pode acontecer no meio da execução.
+
+Para obter a base de dados, basta ler e empilhar os arquivos parciais que foram gerados.
+
+```{r, echo=TRUE}
+rds_files <- fs::dir_ls("data-raw/cposg_rds")
+d_cposg <- purrr::map_dfr(rds_files, readr::read_rds)
+
+glimpse(d_cposg)
+```
+
+### Exercícios
+
+1. O que faz a função `purrr::map_dfr()`?
+2. Estude o objeto `d_cposg`. O que temos na coluna `data`? E na coluna `parts`?
+  - **OBS**: Os objetos `data`, `parts`, `movs` e `decisions` do `d_cposg` são chamados de *list columns*.
+3. Qual é o outro parâmetro da função `esaj::run_parser()`, e o que ele faz?
+
+
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+## Pacote `abjutils`
+
+### Trabalhando com números de processos
+
+O número identificador de um processo judicial utilizado atualmente pelos tribunais é chamado número CNJ, criado na Resolução 65 do CNJ. A resolução define o padrão `NNNNNNN-DD.AAAA.J.TR.OOOO`, descrito abaixo. 
+
+- `NNNNNNN`: Número identificador do processo.
+- `DD`: Dígito verificador gerado a partir da aplicação do algoritmo Módulo 97 Base 10,
+conforme Norma ISO 7064:2003.
+- `AAAA`: Ano do ajuizamento do processo.
+- `J`: Segmento do poder judiciário. No nosso caso, esse número é sempre 8, que identifica
+a Justiça Estadual.
+- `TR`: Identifica o tribunal. No nosso caso, esse número é sempre 26 (TJSP).
+- `OOOO`: Identifica a unidade de origem do processo. No nosso caso, as possíveis
+configurações identificam os foros de São Paulo. Na maioria dos casos, o número
+também identifica a comarca, pois existem poucas comarcas com mais de um foro (e.g.
+a comarca de São Paulo, que possui mais de dez foros regionais). 
+
+```{r, echo=TRUE}
+id_montado <- "0000009-15.2015.8.26.0558"
+id_limpo_dig <- "00000091520158260558"
+id_limpo_ndig <- "000000920158260558"
+```
+
+As funções `abjutils::build_id()` e `abjutils::clean_id()` montam ou limpam o número do processo.
+
+```{r, echo=TRUE}
+abjutils::build_id(id_limpo_dig)
+```
+
+```{r, echo=TRUE}
+abjutils::clean_id(id_montado)
+```
+
+A função `abjutils::extract_parts()` extrai todos os componentes do número do processo.
+
+```{r, echo=TRUE}
+abjutils::extract_parts(id_montado)
+```
+
+A função `abjutils::separate_cnj()` faz o mesmo, mas em uma coluna do banco de dados
+
+```{r, echo=TRUE}
+d_cjsg %>% 
+  abjutils::separate_cnj("id_lawsuit", remove = FALSE) %>% 
+  dplyr::glimpse()
+```
+
+A função `abjutils::calc_dig()` calcula o dígito verificador do processo a partir do número incompleto. A função `abjutils::check_dig()` checa se o dígito do processo está correto. Essas funções são úteis para i) gerar números de processo aleatórios e ii) arrumar erros de parse, por exemplo, o resultado da leitura de um DJE ou de um PDF escaneado.
+
+```{r, echo=TRUE}
+abjutils::calc_dig(id_limpo_ndig)
+```
+
+```{r, echo=TRUE}
+abjutils::check_dig(id_montado)
+```
+
+Finalmente, a função `abjutils::sample_cnj()` serve para criar amostras de números de processos. Esses pocessos podem ser manifestos ou não. Em algumas pesquisas mais complicadas (e.g. nossa pesquisa sobre processamento de homicídios) esse tipo de abordagem é necessária.
+
+```{r, echo=TRUE}
+set.seed(1)
+abjutils::sample_cnj(n = 10, foros = "0001", anos = 2015:2017, 
+                     orgao = "8", tr = "26", 
+                     first_dig = 0, return_df = FALSE) %>% 
+  abjutils::build_id()
+```
+
+### Trabalhando com acentos
+
+A função `abjutils::rm_accent()` serve para tirar acentos de um texto
+
+```{r, echo=TRUE}
+abjutils::rm_accent("Têxto cóm açèntõs")
+```
+
+Só isso! Mas extremamente útil. 
+
+Outra versão dessa função pode ser encontrada no pacote `rslp`.
+
+Para quem é desenvolvedor de pacotes, a função `abjutils::escape_unicode()` é muito útil: ela transforma todos os acentos em códigos do tipo `\uxxxx`, permitindo que o pacote funcione em diferentes plataformas, sem os famosos problemas de encoding. Essa função não é para ser utilizada diretamente, mas sim como um *addin* do RStudio.
+
+### Exercício
+
+1. Faça uma tabela contando as combinações dos números `OOOO` e as comarcas de origem. O que podemos concluir?
+
+<!-- ----------------------------------------------------------------------- -->
+
+
+## Wrap-up
+
+Até agora, vimos
+
+- Um pouco sobre web scraping
+    - Usar o inspect!
+    - pacotes `httr`, `xml2` e `rvest`
+- Scrapers jurimétricos
+    - **listar** números com `esaj::download_cjsg()`.
+    - **coletar** documentos com `esaj::download_cposg()`.
+    - **processar** documentos com `esaj::run_parser()`.
+- Pacote `abjutils`
+    - Trabalhando com número CNJ
+    - Trabalhando com acentos: `abjutils::rm_accent()`
+    
+Agora, vamos trabalhar as bases de dados obtidas e visualizar com alguns pacotes do `tidyverse`.
+
+

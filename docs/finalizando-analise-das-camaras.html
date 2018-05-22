@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>R para jurimetria</title>
+  <meta name="description" content="Template de relatório da ABJ.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="R para jurimetria" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Template de relatório da ABJ." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="R para jurimetria" />
+  
+  <meta name="twitter:description" content="Template de relatório da ABJ." />
+  
+
+<meta name="author" content="Associação Brasileira de Jurimetria">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="transformacao-e-visualizacao-de-dados.html">
+<link rel="next" href="wrap-up-2.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href='http://abj.org.br'><img src='https://raw.githubusercontent.com/abjur/tjspBook/master/abj_logo_cut.png' style="max-width:100%;"/></a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Apresentação</a><ul>
+<li class="chapter" data-level="1.1" data-path="materiais-do-minicurso.html"><a href="materiais-do-minicurso.html"><i class="fa fa-check"></i><b>1.1</b> Materiais do minicurso</a></li>
+<li class="chapter" data-level="1.2" data-path="configuracao-necessaria-para-o-curso.html"><a href="configuracao-necessaria-para-o-curso.html"><i class="fa fa-check"></i><b>1.2</b> Configuração necessária para o curso</a></li>
+<li class="chapter" data-level="1.3" data-path="materiais-e-tarefas-adicionais.html"><a href="materiais-e-tarefas-adicionais.html"><i class="fa fa-check"></i><b>1.3</b> Materiais e tarefas adicionais</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="o-que-e-jurimetria.html"><a href="o-que-e-jurimetria.html"><i class="fa fa-check"></i><b>2</b> O que é Jurimetria?</a><ul>
+<li class="chapter" data-level="2.1" data-path="jurimetria-em-empresas.html"><a href="jurimetria-em-empresas.html"><i class="fa fa-check"></i><b>2.1</b> Jurimetria em empresas</a></li>
+<li class="chapter" data-level="2.2" data-path="a-associacao-brasileira-de-jurimetria.html"><a href="a-associacao-brasileira-de-jurimetria.html"><i class="fa fa-check"></i><b>2.2</b> A Associação Brasileira de Jurimetria</a></li>
+<li class="chapter" data-level="2.3" data-path="jurimetria-na-pratica.html"><a href="jurimetria-na-pratica.html"><i class="fa fa-check"></i><b>2.3</b> Jurimetria na prática</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="jurimetria-na-pratica.html"><a href="jurimetria-na-pratica.html#tribunais-101"><i class="fa fa-check"></i><b>2.3.1</b> Tribunais 101</a></li>
+<li class="chapter" data-level="2.3.2" data-path="jurimetria-na-pratica.html"><a href="jurimetria-na-pratica.html#divisao-regional"><i class="fa fa-check"></i><b>2.3.2</b> Divisão regional</a></li>
+<li class="chapter" data-level="2.3.3" data-path="jurimetria-na-pratica.html"><a href="jurimetria-na-pratica.html#tipos-de-estudo"><i class="fa fa-check"></i><b>2.3.3</b> Tipos de estudo</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="estudo-camaras-criminais.html"><a href="estudo-camaras-criminais.html"><i class="fa fa-check"></i><b>2.4</b> Estudo: Câmaras criminais</a></li>
+<li class="chapter" data-level="2.5" data-path="cuidado.html"><a href="cuidado.html"><i class="fa fa-check"></i><b>2.5</b> Cuidado</a></li>
+<li class="chapter" data-level="2.6" data-path="wrap-up.html"><a href="wrap-up.html"><i class="fa fa-check"></i><b>2.6</b> Wrap-up</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="importacao-de-dados.html"><a href="importacao-de-dados.html"><i class="fa fa-check"></i><b>3</b> Importação de dados</a><ul>
+<li class="chapter" data-level="3.1" data-path="usando-o-inspect.html"><a href="usando-o-inspect.html"><i class="fa fa-check"></i><b>3.1</b> Usando o Inspect</a></li>
+<li class="chapter" data-level="3.2" data-path="pacotes-httr-xml2-e-rvest.html"><a href="pacotes-httr-xml2-e-rvest.html"><i class="fa fa-check"></i><b>3.2</b> Pacotes <code>httr</code>, <code>xml2</code> e <code>rvest</code></a><ul>
+<li class="chapter" data-level="3.2.1" data-path="pacotes-httr-xml2-e-rvest.html"><a href="pacotes-httr-xml2-e-rvest.html#get-e-post"><i class="fa fa-check"></i><b>3.2.1</b> <code>GET</code> e <code>POST</code></a></li>
+<li class="chapter" data-level="3.2.2" data-path="pacotes-httr-xml2-e-rvest.html"><a href="pacotes-httr-xml2-e-rvest.html#exercicios"><i class="fa fa-check"></i><b>3.2.2</b> Exercícios</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="listando-processos.html"><a href="listando-processos.html"><i class="fa fa-check"></i><b>3.3</b> Listando processos</a></li>
+<li class="chapter" data-level="3.4" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html"><i class="fa fa-check"></i><b>3.4</b> Usando o <code>esaj</code> para listar processos</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#pesquisa-por-palavras-chave"><i class="fa fa-check"></i><b>3.4.1</b> Pesquisa por palavras-chave</a></li>
+<li class="chapter" data-level="3.4.2" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#pesquisa-por-datas"><i class="fa fa-check"></i><b>3.4.2</b> Pesquisa por datas</a></li>
+<li class="chapter" data-level="3.4.3" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#tabelas-de-classes-assuntos-e-camaras"><i class="fa fa-check"></i><b>3.4.3</b> Tabelas de classes, assuntos e câmaras</a></li>
+<li class="chapter" data-level="3.4.4" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#a-funcao-download_cjsg"><i class="fa fa-check"></i><b>3.4.4</b> A função <code>download_cjsg</code></a></li>
+<li class="chapter" data-level="3.4.5" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#exercicios-1"><i class="fa fa-check"></i><b>3.4.5</b> Exercícios</a></li>
+<li class="chapter" data-level="3.4.6" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#arrumando-os-dados"><i class="fa fa-check"></i><b>3.4.6</b> Arrumando os dados</a></li>
+<li class="chapter" data-level="3.4.7" data-path="usando-o-esaj-para-listar-processos.html"><a href="usando-o-esaj-para-listar-processos.html#exercicios-2"><i class="fa fa-check"></i><b>3.4.7</b> Exercícios</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="baixando-processos-individuais.html"><a href="baixando-processos-individuais.html"><i class="fa fa-check"></i><b>3.5</b> Baixando processos individuais</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="baixando-processos-individuais.html"><a href="baixando-processos-individuais.html#download-cposg"><i class="fa fa-check"></i><b>3.5.1</b> Download CPOSG</a></li>
+<li class="chapter" data-level="3.5.2" data-path="baixando-processos-individuais.html"><a href="baixando-processos-individuais.html#baixando-decisoes"><i class="fa fa-check"></i><b>3.5.2</b> Baixando decisões</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="processando-documentos.html"><a href="processando-documentos.html"><i class="fa fa-check"></i><b>3.6</b> Processando documentos</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="processando-documentos.html"><a href="processando-documentos.html#parse-cposg"><i class="fa fa-check"></i><b>3.6.1</b> Parse CPOSG</a></li>
+<li class="chapter" data-level="3.6.2" data-path="processando-documentos.html"><a href="processando-documentos.html#exercicios-3"><i class="fa fa-check"></i><b>3.6.2</b> Exercícios</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="pacote-abjutils.html"><a href="pacote-abjutils.html"><i class="fa fa-check"></i><b>3.7</b> Pacote <code>abjutils</code></a><ul>
+<li class="chapter" data-level="3.7.1" data-path="pacote-abjutils.html"><a href="pacote-abjutils.html#trabalhando-com-numeros-de-processos"><i class="fa fa-check"></i><b>3.7.1</b> Trabalhando com números de processos</a></li>
+<li class="chapter" data-level="3.7.2" data-path="pacote-abjutils.html"><a href="pacote-abjutils.html#trabalhando-com-acentos"><i class="fa fa-check"></i><b>3.7.2</b> Trabalhando com acentos</a></li>
+<li class="chapter" data-level="3.7.3" data-path="pacote-abjutils.html"><a href="pacote-abjutils.html#exercicio"><i class="fa fa-check"></i><b>3.7.3</b> Exercício</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="wrap-up-1.html"><a href="wrap-up-1.html"><i class="fa fa-check"></i><b>3.8</b> Wrap-up</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="transformacao-e-visualizacao-de-dados.html"><a href="transformacao-e-visualizacao-de-dados.html"><i class="fa fa-check"></i><b>4</b> Transformação e visualização de dados</a><ul>
+<li class="chapter" data-level="4.1" data-path="finalizando-analise-das-camaras.html"><a href="finalizando-analise-das-camaras.html"><i class="fa fa-check"></i><b>4.1</b> Finalizando análise das câmaras</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="finalizando-analise-das-camaras.html"><a href="finalizando-analise-das-camaras.html#como-se-distribuem-os-assuntos-em-cada-camara"><i class="fa fa-check"></i><b>4.1.1</b> Como se distribuem os assuntos em cada câmara?</a></li>
+<li class="chapter" data-level="4.1.2" data-path="finalizando-analise-das-camaras.html"><a href="finalizando-analise-das-camaras.html#qual-a-proporcao-de-decisoes-por-camara"><i class="fa fa-check"></i><b>4.1.2</b> Qual a proporção de decisões por câmara?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="wrap-up-2.html"><a href="wrap-up-2.html"><i class="fa fa-check"></i><b>4.2</b> Wrap-up</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R para jurimetria</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="finalizando-analise-das-camaras" class="section level2">
+<h2><span class="header-section-number">4.1</span> Finalizando análise das câmaras</h2>
+<p>Agora vamos fazer gráficos!</p>
+<p><img src="imgs/dataviz.jpg" width="70%" style="display: block; margin: auto;" /></p>
+<div id="como-se-distribuem-os-assuntos-em-cada-camara" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Como se distribuem os assuntos em cada câmara?</h3>
+<p>Gráfico fraqueza:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_cjsg <span class="op">%&gt;%</span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(class_subject, <span class="kw">c</span>(<span class="st">&#39;classe&#39;</span>, <span class="st">&#39;assunto&#39;</span>), 
+                  <span class="dt">sep =</span> <span class="st">&#39; / &#39;</span>,  <span class="dt">extra =</span> <span class="st">&#39;merge&#39;</span>, <span class="dt">fill =</span> <span class="st">&#39;right&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> court, <span class="dt">fill =</span> assunto)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-46-1.svg" width="864" /></p>
+<p>Gráfico nutella:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_cjsg <span class="op">%&gt;%</span>
+<span class="st">  </span>## transformacao -------------------------------------------------------------
+<span class="st">  </span><span class="co"># tirar NA (não tem problema pois são aqueles casos que não existem)</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(court)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">separate</span>(class_subject, <span class="kw">c</span>(<span class="st">&#39;classe&#39;</span>, <span class="st">&#39;assunto&#39;</span>), <span class="dt">sep =</span> <span class="st">&#39; / &#39;</span>, 
+                  <span class="dt">extra =</span> <span class="st">&#39;merge&#39;</span>, <span class="dt">fill =</span> <span class="st">&#39;right&#39;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># categorizar os assuntos e mudar a ordem</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">assunto =</span> assunto <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>stringr<span class="op">::</span><span class="kw">str_wrap</span>(<span class="dv">19</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>forcats<span class="op">::</span><span class="kw">fct_infreq</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># ordena o factor decrescente</span>
+<span class="st">                  </span>forcats<span class="op">::</span><span class="kw">fct_rev</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>forcats<span class="op">::</span><span class="kw">fct_lump</span>(<span class="dt">n =</span> <span class="dv">11</span>, <span class="dt">other_level =</span> <span class="st">&quot;Outros&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># pega somente os números das câmaras e coloca zeros à esquerda</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">num =</span> <span class="kw">parse_number</span>(court),
+                <span class="dt">num =</span> <span class="kw">str_pad</span>(num, <span class="dv">2</span>, <span class="dt">pad =</span> <span class="st">&quot;0&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># grafico --------------------------------------------------------------------</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> num, <span class="dt">fill =</span> assunto)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_legend</span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="co"># coisas cosméticas</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dv">14</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Órgão julgador&#39;</span>, 
+       <span class="dt">y =</span> <span class="st">&#39;Proporção de </span><span class="ch">\n</span><span class="st">processos por assunto&#39;</span>,
+       <span class="dt">fill =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-47-1.svg" width="864" /></p>
+</div>
+<div id="qual-a-proporcao-de-decisoes-por-camara" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Qual a proporção de decisões por câmara?</h3>
+<p>Primeiro, vamos montar a função que classifica as decisões.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># essa é a classificação final</span>
+negaram &lt;-<span class="st"> </span>stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&#39;negara?m|nega-se|negam-se&#39;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)
+parcial &lt;-<span class="st"> </span>stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&#39;parcial&#39;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)
+deram &lt;-<span class="st"> </span>stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&#39;deram|mantiv|dá-se|nul|conhec&#39;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)
+extinto &lt;-<span class="st"> </span>stringr<span class="op">::</span><span class="kw">regex</span>(<span class="st">&#39;extin&#39;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)
+
+tipos_decisao &lt;-<span class="st"> </span><span class="cf">function</span>(decisoes) {
+  dplyr<span class="op">::</span><span class="kw">case_when</span>(
+    stringr<span class="op">::</span><span class="kw">str_detect</span>(decisoes, negaram) <span class="op">~</span><span class="st"> &#39;negado&#39;</span>,
+    stringr<span class="op">::</span><span class="kw">str_detect</span>(decisoes, parcial) <span class="op">~</span><span class="st"> &#39;parcial&#39;</span>,
+    stringr<span class="op">::</span><span class="kw">str_detect</span>(decisoes, deram) <span class="op">~</span><span class="st"> &#39;provido&#39;</span>,
+    stringr<span class="op">::</span><span class="kw">str_detect</span>(decisoes, extinto) <span class="op">~</span><span class="st"> &#39;extinto&#39;</span>,
+    <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;outros&quot;</span>)
+}</code></pre></div>
+<p>Agora, vamos pegar apenas os casos em que as pessoas entraram com recursos de apelação contra o Ministério Público.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">partes_apelacoes &lt;-<span class="st"> </span>d_cposg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, id_lawsuit, parts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(parts) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(part <span class="op">==</span><span class="st"> &#39;Apelado&#39;</span>, stringr<span class="op">::</span><span class="kw">str_detect</span>(name, <span class="st">&#39;[Mm]inist&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Exercício: por que usamos distinct aqui?</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">distinct</span>(id_lawsuit)</code></pre></div>
+<p>Agora, montamos a base de decisões</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_decisoes &lt;-<span class="st"> </span>d_cposg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, id_lawsuit, decisions) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">unnest</span>(decisions) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Exercício: o que faz semi_join()?</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">semi_join</span>(partes_apelacoes, <span class="st">&quot;id_lawsuit&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(<span class="kw">desc</span>(date)) <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(id_lawsuit) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="co"># Exercício: o que faz slice()?</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">slice</span>(<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>()
+
+decisoes &lt;-<span class="st"> </span>d_decisoes <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">tipo_decisao =</span> <span class="kw">tipos_decisao</span>(decision)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id_lawsuit, tipo_decisao)</code></pre></div>
+<p>Gráfico fraqueza:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d_cjsg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">distinct</span>(id_lawsuit, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(decisoes, <span class="st">&#39;id_lawsuit&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> court, <span class="dt">fill =</span> tipo_decisao)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;fill&quot;</span>)</code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-51-1.svg" width="864" /></p>
+<p>Gráfico nutella:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prop_negados &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+ <span class="kw">sum</span>(x <span class="op">==</span><span class="st"> &quot;negado&quot;</span>) <span class="op">/</span><span class="st"> </span><span class="kw">length</span>(x)
+}
+
+d_cjsg <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">distinct</span>(id_lawsuit, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">inner_join</span>(decisoes, <span class="st">&#39;id_lawsuit&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">num =</span> court <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>readr<span class="op">::</span><span class="kw">parse_number</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>stringr<span class="op">::</span><span class="kw">str_pad</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">pad =</span> <span class="st">&quot;0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>forcats<span class="op">::</span><span class="kw">fct_reorder</span>(tipo_decisao, prop_negados) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span>forcats<span class="op">::</span><span class="kw">fct_rev</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">tipo_decisao =</span> <span class="kw">fct_infreq</span>(tipo_decisao) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fct_rev</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># grafico --------------------------------------------------------------------</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> num, <span class="dt">fill =</span> tipo_decisao)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">position =</span> <span class="st">&#39;fill&#39;</span>, <span class="dt">size =</span> .<span class="dv">3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="dv">4</span>, <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> .<span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales<span class="op">::</span>percent) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span>
+<span class="st">  </span><span class="co"># perfumaria -----------------------------------------------------------------</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="kw">guide_legend</span>(<span class="dt">reverse =</span> <span class="ot">TRUE</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>(<span class="dv">16</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Câmara&quot;</span>, 
+       <span class="dt">y =</span> <span class="st">&#39;Proporção de processos por tipo de decisão&#39;</span>, 
+       <span class="dt">fill =</span> <span class="st">&quot;Decisão&quot;</span>)</code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-52-1.svg" width="864" /></p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="transformacao-e-visualizacao-de-dados.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="wrap-up-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

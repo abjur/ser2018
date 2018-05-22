@@ -1,0 +1,167 @@
+# O que é Jurimetria?
+
+A jurimetria é o estudo empírico do direito. Ela se distingue das demais disciplinas jurídicas por tratar o direito de forma concreta. 
+
+```{r, out.width="60%", fig.align='center'}
+knitr::include_graphics("imgs/empirical.png")
+```
+
+Tratar o direito de forma concreta significa situar nosso objeto de estudo no tempo e no espaço. Ao invés de estudar como é a norma e o ordenamento jurídico, estudamos como as decisões são tomadas nos tribunais, dentro de um determinado escopo.
+
+A pesquisa em jurimetria utiliza dados do judiciário para avaliar desde argumentos quantitativos a serem utilizados por juristas e advogados até estimar o impacto de leis. No Brasil, é utilizada principalmente como ferramenta para 
+
+1. auxiliar na **formulação de políticas públicas**,
+2. melhorar a **administração dos tribunais**,
+3. calcular o **risco** de carteiras de processos e 
+4. otimizar **estratégias** processuais.
+
+--------------------------------------------------------------------------------
+
+## Jurimetria em empresas
+
+No mundo corporativo, a jurimetria está se tornando essencial para departamentos jurídicos de grandes empresas e escritórios de advocacia. O movimento da tecnologia no Direito ganhou ainda mais força no ano de 2017 com o advento da AB2L e das lawtechs, as startups do meio jurídico.
+
+```{r, out.width="100%"}
+knitr::include_graphics("imgs/jurimetria_empresas.png")
+```
+
+--------------------------------------------------------------------------------
+
+## A Associação Brasileira de Jurimetria
+
+Nesse sentido, uma das missões da **Associação Brasileira de Jurimetria (ABJ)** é incentivar e divulgar a jurimetria aos seus associados e ao público em geral. Nossos estudos e pesquisas visam a difusão e o desenvolvimento do campo no Brasil, agregando pesquisadores e fornecendo o ferramental necessário para realização das análises.
+
+```{r, fig.align='center'}
+knitr::include_graphics("imgs/missoes_abj.png")
+```
+
+Neste curso, apresentaremos o ferramental de trabalho desenvolvido no laboratório da ABJ. As ferramentas servem principalmente para extração e arrumação de dados, deixando o caminho livre para realização de análises estatísticas mais aprofundadas. 
+
+```{r, fig.align='center'}
+knitr::include_graphics(c("imgs/esaj.png"))
+```
+
+--------------------------------------------------------------------------------
+
+## Jurimetria na prática
+
+
+```{r, out.width="90%", fig.align='center'}
+knitr::include_graphics(c("imgs/download_esaj.png", 
+                          "imgs/tidy_esaj.png", 
+                          "imgs/model_esaj.png"))
+```
+
+--------------------------------------------------------------------------------
+
+### Tribunais 101
+
+Digamos que a NET tenha colocado seu nome indevidamente no Serasa e você processa a NET por dano moral e material.
+
+1) Quando você entra com um *processo*, ele é *distribuído* (levado) numa *vara* (casinha do juiz), por exemplo uma vara cível de Niterói, e seu processo estará na 1a instância. O juiz então irá decidir sobre o caso, produzindo uma *sentença* (um texto de 5-10 páginas que explica o que ele decidiu e por quê).
+
+2) Se você ou a NET ficarem infelizes com o resultado, vocês podem entrar com um *recurso de apelação* (evolução de processo), que será *distribuído* numa *câmara* (evolução de vara) do Tribunal de Justiça de São Paulo (TJSP, que fica na praça da Sé, em São Paulo), a ser julgada por desembargadores (evolução de juiz), e seu processo estará na 2a instância. Os desembargadores então irão decidir sobre o caso, produzindo um *acórdão* (evolução de sentença).
+
+3) Se você ou a NET ficarem infelizes com o resultado, vocês podem novamente entrar com recursos, que irão para o STJ e posteriormente ao STF (em Brasília), a serem julgados por Ministros (evolução de desembargador).
+
+```{r, fig.align='center', out.width="100%"}
+knitr::include_graphics("imgs/magistrado.png")
+```
+
+Nossos estudos restringem-se ao TJSP, envolvendo (1) e (2). O TJSP atualmente é o mais simples para obtenção automática de processos.
+
+### Divisão regional
+
+O TJSP é dividido em comarcas, circunscrições e regiões administrativas. As comarcas são conjuntos de um ou mais municípios e uma comarca deve sempre ter uma ou mais varas. Circunscrições e regiões administrativas existem somente para 
+
+```{r, out.width="100%"}
+knitr::include_graphics("imgs/mapa.png")
+```
+
+--------------------------------------------------------------------------------
+
+### Tipos de estudo
+
+Estudos **prospectivos** acompanham o processo judicial desde a **data de distribuição até o fim**. O fim pode ser marcado pela data da sentença, acórdão, ou outro evento de interesse. Ou seja, os casos são indexados *pela data de nascimento*, e acompanhados até a data de sua morte. Em muitos casos, os processos ainda não atingiram o fim no momento da realização do estudo.
+
+Estudos **retrospectivo** levantam processos que **acabaram** (por sentença ou por acórdão) e analisa suas características. Ou seja, os casos são indexados *pela data de morte*.
+
+A Figura abaixo mostra os diferentes escopos.
+
+- ( 1) Prospectivo e retrospectivo.
+- ( 2) Apenas prospectivo.
+- ( 3) Apenas retrospectivo.
+- ( 4) Nenhum dos dois, mas poderia ser capturado por atividade no período.
+- (5 e 6) fora do escopo.
+- ( 7) Nenhum dos dois tipos e não poderia ser capturado (ficou inativo no período).
+
+```{r out.width="100%"}
+knitr::include_graphics("imgs/tempos.png")
+```
+
+Estudos prospectivos são úteis quando o intuito é estudar o tempo das fases do processo. Já estudos retrospectivos são úteis para a análise do perfil de decisões. Estudos que analisam tempos em bases retrospectivas podem estar cometendo viés.
+
+## Estudo: Câmaras criminais
+
+O Direito Criminal é uma área que traz consigo diversas questões difíceis e importantes da nossa sociedade. Uma destas questões, que remete ao possível descolamento da teoria do Direito e o que ocorre no mundo real, trata do cumprimento da pena. 
+
+Considerando-se o plano ideal e o princípio de ampla defesa, mas também a conhecida morosidade dos tribunais, qual é o momento do processo em que deveria ser iniciado o cumprimento de pena? Será que a taxa de reforma das decisões é tão pequena a ponto de justificar o início do cumprimento de pena após a sentença na primeira instância?
+
+A Figura \@ref(fig:freq-tipo-orgjulg) mostra a distribuição dos resultados dos processos em relação aos órgãos julgadores. Podemos encontrar câmaras com mais de 75% de recursos negados (quarta e sexta) e câmaras com menos de 30% de recursos negados (primeira, segunda e décima segunda). Este resultado poderia ser explicado por duas hipóteses: 
+
+i) os processos não são distribuídos aleatoriamente nas câmaras, e é feita uma triagem que envolve o tipo do recurso; ou 
+
+ii) os magistrados de cada câmara comportam-se de maneiras muito diferentes, mesmo para processos considerados homogêneos.
+
+```{r freq-tipo-orgjulg, fig.width=9, fig.height=5, fig.cap="Resultados por câmara."}
+load("data/d_final.rda")
+
+d_para_grafico <- d_final %>% 
+  rename(court = orgao_julgador, decision = decisao) %>% 
+  filter(str_detect(court, "Câmara")) %>% 
+  mutate(tipo = if_else(str_detect(court, "Extra"), 
+                        "Extraordinária", "Ordinária"),
+         court = str_extract(court, "[^ ]+(?= )"),
+         court = if_else(tipo == "Ordinária", paste0(court, "."), court)) %>% 
+  count(court, tipo, decision) %>% 
+  group_by(court) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  ungroup() %>% 
+  arrange(decision) %>% 
+  mutate(court = fct_reorder(court, prop, fun = first, .desc = TRUE))
+
+d_para_grafico %>% 
+  ggplot() +
+  aes(x = court, y = n, fill = fct_rev(decision)) +
+  geom_col(position = "fill") +
+  facet_wrap(~fct_rev(tipo), scales = "free_y") +
+  # cosmética
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Câmara", y = "Proporção", fill = "Decisão") +
+  theme_minimal(16) +
+  coord_flip() +
+  theme(legend.position = "bottom")
+```
+
+--------------------------------------------------------------------------------
+
+## Cuidado
+
+```{r, fig.align='center', out.width="70%"}
+knitr::include_graphics("imgs/beware.jpg")
+```
+
+As bases de dados utilizadas em estudos jurimétricos foram originalmente concebidas para fins gerenciais e não analíticos. Por isso, observamos muitos dados faltantes, mal formatados e com documentação inadequada. Uma boa porção dos dados só está disponível em páginas HTML e arquivos PDF e grande parte da informação útil está escondida em textos.
+
+Chamamos esse fenômeno de "pré-sal sociológico". Temos hoje diversas bases de dados armazenadas em repositórios públicos ou controladas pelo poder público, mas que precisam ser lapidadas para obtenção de informação útil.
+
+O jurimetrista trabalha com dados sujos e desorganizados, mas gera muito valor ao extrair suas informações. Por isso, o profissional precisa dominar o ferramental de extração, transformação e visualização de dados, e é sobre isso que discutiremos na primeira parte do minicurso. Utilizaremos como base o software estatístico `R`, que atualmente possui diversas ferramentas que ajudam nessas atividades.
+
+--------------------------------------------------------------------------------
+
+## Wrap-up
+
+- Jurimetria é a estatística aplicada no direito
+- No judiciário, as coisas mudam de nome conforme mudamos de instâncias
+- Precisamos pensar em estudos prospectivos e retrospectivos
+- Os dados são extremamente desorganizados
