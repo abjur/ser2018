@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Jurimetria com aplicações em R</title>
   <meta name="description" content="Jurimetria com aplicações em R">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7.11 and GitBook 2.6.7">
 
   <meta property="og:title" content="Jurimetria com aplicações em R" />
   <meta property="og:type" content="book" />
@@ -192,7 +192,7 @@ esaj<span class="op">::</span><span class="kw">download_cposg</span>(processos, 
 <div id="baixando-decisoes" class="section level3">
 <h3><span class="header-section-number">3.5.2</span> Baixando decisões</h3>
 <p>Você também pode baixar as decisões (sentenças ou acórdãos) do processo, em PDF. O código a ser rodado nesse caso é</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acordaos &lt;-<span class="st"> </span>d_cjsg<span class="op">$</span>id_decision
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acordaos &lt;-<span class="st"> </span><span class="kw">head</span>(d_cjsg<span class="op">$</span>id_decision)
 esaj<span class="op">::</span><span class="kw">download_decision</span>(acordaos, <span class="dt">path =</span> <span class="st">&quot;data-raw/decisions&quot;</span>)</code></pre></div>
 <p>Por trás da função <code>esaj::download_decision()</code> estamos quebrando um CAPTCHA. Essa função ainda está instável, então pode ser necessário rodá-la várias vezes para obter os documentos finais.</p>
 <hr />
@@ -222,10 +222,11 @@ gitbook.start({
 "facebook": false,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -246,4 +247,4 @@ gitbook.start({
 
 </body>
 
-<!-- </html> -->
+</html>

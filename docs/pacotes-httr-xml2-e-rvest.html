@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Jurimetria com aplicações em R</title>
   <meta name="description" content="Jurimetria com aplicações em R">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7.11 and GitBook 2.6.7">
 
   <meta property="og:title" content="Jurimetria com aplicações em R" />
   <meta property="og:type" content="book" />
@@ -196,17 +196,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">httr<span class="op">::</span><span class="kw">GET</span>(<span class="st">&quot;http://google.com/search&quot;</span>, 
           <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">q =</span> <span class="st">&quot;jurimetria&quot;</span>))</code></pre></div>
 <pre><code>#&gt; Response [http://www.google.com/search?q=jurimetria]
-#&gt;   Date: 2018-05-22 13:51
+#&gt;   Date: 2018-05-22 14:43
 #&gt;   Status: 200
 #&gt;   Content-Type: text/html; charset=ISO-8859-1
-#&gt;   Size: 38.1 kB
+#&gt;   Size: 38.3 kB
 #&gt; &lt;!doctype html&gt;&lt;html itemscope=&quot;&quot; itemtype=&quot;http://schema.org/SearchResu...
 #&gt; no Direito. Índice. [esconder]. 1 Histórico; 2 Os Três Prismas da &lt;b&gt;Jur...
 #&gt; softwares jurídicos para prever resultados.&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;div c...
 #&gt; Webinar: Tabelas Processuais Unificadas On-line. 02 jul. Webinar: Estrut...
 #&gt; números e da tecnologia para o jurídico da empresa. Leonardo Barém Leite...
-#&gt; ayuda a afrontar con fiabilidad el mejor planteamiento procesal.&lt;/span&gt;&lt;...
 #&gt; &lt;b&gt;Jurimetria&lt;/b&gt;.&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;g&quot;&gt;&lt;h3 class=&quot;r&quot;&gt;&lt;a...
+#&gt; ayuda a afrontar con fiabilidad el mejor planteamiento procesal.&lt;/span&gt;&lt;...
 #&gt; a todo esforço de pesquisa empírica séria é que ninguém muda aquilo que&amp;...
 #&gt; Brasileira de &lt;b&gt;Jurimetria&lt;/b&gt;, Marcelo Guedes Nunes, que lançou o&amp;nbsp...</code></pre>
 <p>Exemplo de <code>POST</code></p>
@@ -214,7 +214,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
            <span class="dt">body =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="st">&quot;Mãe to na request&quot;</span>), 
            <span class="dt">encode =</span> <span class="st">&quot;json&quot;</span>)</code></pre></div>
 <pre><code>#&gt; Response [http://httpbin.org/post]
-#&gt;   Date: 2018-05-22 13:51
+#&gt;   Date: 2018-05-22 14:43
 #&gt;   Status: 200
 #&gt;   Content-Type: application/json
 #&gt;   Size: 429 B
@@ -254,10 +254,11 @@ gitbook.start({
 "facebook": false,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -278,4 +279,4 @@ gitbook.start({
 
 </body>
 
-<!-- </html> -->
+</html>
