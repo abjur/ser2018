@@ -279,7 +279,7 @@ esaj::download_cposg(processos, "data-raw/cposg")
 Você também pode baixar as decisões (sentenças ou acórdãos) do processo, em PDF. O código a ser rodado nesse caso é
 
 ```{r eval=FALSE, echo=TRUE}
-acordaos <- d_cjsg$id_decision
+acordaos <- head(d_cjsg$id_decision)
 esaj::download_decision(acordaos, path = "data-raw/decisions")
 ```
 
@@ -331,7 +331,7 @@ Para obter a base de dados, basta ler e empilhar os arquivos parciais que foram 
 rds_files <- fs::dir_ls("data-raw/cposg_rds")
 d_cposg <- purrr::map_dfr(rds_files, readr::read_rds)
 
-glimpse(d_cposg)
+dplyr::glimpse(d_cposg)
 ```
 
 ### Exercícios
