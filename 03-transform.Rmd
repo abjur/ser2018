@@ -28,9 +28,7 @@ d_decisoes <- d_cposg %>%
   tidyr::unnest(decisions)
 ```
 
-
 --------------------------------------------------------------------------------
-
 
 ## Finalizando análise das câmaras
 
@@ -110,8 +108,8 @@ Agora, vamos pegar apenas os casos em que as pessoas entraram com recursos de ap
 
 ```{r echo=TRUE}
 partes_apelacoes <- d_cposg %>% 
-  dplyr::select(id, id_lawsuit, parts) %>% 
-  tidyr::unnest(parts) %>% 
+  dplyr::select(id_lawsuit, parts) %>% 
+  tidyr::unnest_legacy(parts) %>% 
   dplyr::filter(part == 'Apelado', stringr::str_detect(name, '[Mm]inist')) %>% 
   # Exercício: por que usamos distinct aqui?
   dplyr::distinct(id_lawsuit)
@@ -122,7 +120,7 @@ Agora, montamos a base de decisões
 ```{r echo=TRUE}
 d_decisoes <- d_cposg %>% 
   dplyr::select(id, id_lawsuit, decisions) %>% 
-  tidyr::unnest(decisions) %>% 
+  tidyr::unnest_legacy(decisions) %>% 
   # Exercício: o que faz semi_join()?
   dplyr::semi_join(partes_apelacoes, "id_lawsuit") %>% 
   dplyr::arrange(desc(date)) %>%  
@@ -150,7 +148,7 @@ Gráfico nutella:
 
 ```{r, echo=TRUE, eval=TRUE, fig.width=9, fig.height=6}
 prop_negados <- function(x) {
- sum(x == "negado") / length(x)
+  sum(x == "negado") / length(x)
 }
 
 d_cjsg %>%

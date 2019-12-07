@@ -1,15 +1,5 @@
 # Importação de dados
 
-**Setup**
-
-1. Logar no servidor http://r.abj.org.br
-2. Novo projeto > Version Control > GIT
-3. Colocar a URL https://github.com/abjur/ser2018
-4. Iniciar projeto
-5. Abrir o arquivo 02-import.Rmd
-6. Rodar `library(tidyverse)`
-
-
 ```{r}
 library(tidyverse)
 ```
@@ -64,12 +54,7 @@ O conteúdo dessa página é a **requisição web** utilizada para acessar o e-S
 Tenha em mente que, para construir um scraper, você usará duas ferramentas principais: seu navegador e o RStudio.
 
 
-
-
-
 <!-- ----------------------------------------------------------------------- -->
-
-
 
 
 ## Pacotes `httr`, `xml2` e `rvest`
@@ -114,14 +99,7 @@ Use o Inspect:
 1. Qual o método usado na pesquisa de jurisprudência do TJSP?
 2. Qual o método usado na busca avançada de diários de justiça do TJSP?
 
-
-
 <!-- ----------------------------------------------------------------------- -->
-
-
-
-
-
 
 ## Listando processos
 
@@ -131,12 +109,7 @@ A forma de listar processos muda se seu estudo é prospectivo ou retrospectivo. 
 
 - Se o seu estudo é prospectivo, use`dje::download_dje()`. DJE significa Diário de Justiça Eletrônico
 
-
-
 <!-- ----------------------------------------------------------------------- -->
-
-
-
 
 
 ## Usando o `esaj` para listar processos
@@ -246,8 +219,6 @@ Na pesquisa que você fez:
 2. Qual a comarca de origem mais frequente?
 3. [Difícil] Qual é o assunto mais comum?
 
-
-
 <!-- ----------------------------------------------------------------------- -->
 
 
@@ -259,8 +230,6 @@ A tarefa de baixar documentos a partir de processos será realizada pelas funç�
 
 - `esaj::download_cposg()`, 
 - `esaj::download_decision()`.
-
-
 
 ### Download CPOSG
 
@@ -370,14 +339,14 @@ id_limpo_dig <- "00000091520158260558"
 id_limpo_ndig <- "000000920158260558"
 ```
 
-As funções `abjutils::build_id()` e `abjutils::clean_id()` montam ou limpam o número do processo.
+As funções `abjutils::build_id()` e `abjutils::clean_cnj()` montam ou limpam o número do processo.
 
 ```{r, echo=TRUE}
 abjutils::build_id(id_limpo_dig)
 ```
 
 ```{r, echo=TRUE}
-abjutils::clean_id(id_montado)
+abjutils::clean_cnj(id_montado)
 ```
 
 A função `abjutils::extract_parts()` extrai todos os componentes do número do processo.

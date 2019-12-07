@@ -2,10 +2,6 @@
 
 A jurimetria é o estudo empírico do direito. Ela se distingue das demais disciplinas jurídicas por tratar o direito de forma concreta. 
 
-```{r, out.width="60%", fig.align='center'}
-knitr::include_graphics("imgs/empirical.png")
-```
-
 Tratar o direito de forma concreta significa situar nosso objeto de estudo no tempo e no espaço. Ao invés de estudar como é a norma e o ordenamento jurídico, estudamos como as decisões são tomadas nos tribunais, dentro de um determinado escopo.
 
 A pesquisa em jurimetria utiliza dados do judiciário para avaliar desde argumentos quantitativos a serem utilizados por juristas e advogados até estimar o impacto de leis. No Brasil, é utilizada principalmente como ferramenta para 
